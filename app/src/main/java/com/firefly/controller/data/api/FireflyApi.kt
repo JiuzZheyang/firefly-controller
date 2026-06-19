@@ -10,13 +10,4 @@ interface FireflyApi {
 
     @GET("api/status")
     suspend fun getStatus(): StatusResponse
-
-    @GET("api/tasks")
-    suspend fun getTasks(
-        @Query("status") status: String = "all",
-        @Query("limit") limit: Int = 20
-    ): TaskResponse
-
-    @POST("api/command")
-    suspend fun sendCommand(@Body request: CommandRequest): CommandResponse
 }
