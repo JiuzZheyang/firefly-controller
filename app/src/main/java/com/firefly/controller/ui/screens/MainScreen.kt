@@ -35,7 +35,8 @@ fun MainScreen(
     onCommandChange: (String) -> Unit,
     onSendCommand: () -> Unit,
     onRefresh: () -> Unit,
-    onClearError: () -> Unit
+    onClearError: () -> Unit,
+    onSettingsClick: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -52,6 +53,9 @@ fun MainScreen(
                     ConnectionBadge(isConnected = state.isConnected)
                     IconButton(onClick = onRefresh) {
                         Icon(Icons.Default.Refresh, contentDescription = "Refresh")
+                    }
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(Icons.Default.Settings, contentDescription = "Settings")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

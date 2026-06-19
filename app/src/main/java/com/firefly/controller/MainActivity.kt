@@ -4,16 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.firefly.controller.data.repository.FireflyRepository
 import com.firefly.controller.ui.MainViewModel
 import com.firefly.controller.ui.ViewModelFactory
 import com.firefly.controller.ui.screens.MainScreen
+import com.firefly.controller.ui.screens.SettingsScreen
+import com.firefly.controller.ui.screens.SettingsViewModel
 import com.firefly.controller.ui.theme.FireflyTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,22 +27,33 @@ class MainActivity : ComponentActivity() {
         
         setContent {
             FireflyTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val viewModel: MainViewModel = viewModel(
-                        factory = ViewModelFactory(repository)
+                var showSettings by remember { mutableStateOf(false) }
+                
+                if (showSettings) {
+                    val settingsViewModel = remember { SettingsViewModel(repository) }
+                    SettingsScreen(
+                        viewModel = settingsViewModel,
+                        onBack = { showSettings = false }
                     )
-                    val state by viewModel.uiState.collectAsState()
-                    
-                    MainScreen(
-                        state = state,
-                        onCommandChange = viewModel::updateCommandText,
-                        onSendCommand = viewModel::sendCommand,
-                        onRefresh = viewModel::checkConnection,
-                        onClearError = viewModel::clearError
-                    )
+                } else {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        val viewModel: MainViewModel = viewModel(
+                            factory = ViewModelFactory(repository)
+                        )
+                        val state by viewModel.uiState.collectAsState()
+                        
+                        MainScreen(
+                            state = state,
+                            onCommandChange = viewModel::updateCommandText,
+                            onSendCommand = viewModel::sendCommand,
+                            onRefresh = viewModel::checkConnection,
+                            onClearError = viewModel::clearError,
+                            onSettingsClick = { showSettings = true }
+                        )
+                    }
                 }
             }
         }
