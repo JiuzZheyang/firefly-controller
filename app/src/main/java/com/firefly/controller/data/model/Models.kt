@@ -1,47 +1,26 @@
 package com.firefly.controller.data.model
 
-data class ApiResponse(
-    val success: Boolean,
-    val error: String? = null
+data class SystemStats(
+    val uptime: String = "",
+    val cpu_load: String = "",
+    val memory_total: Int = 0,
+    val memory_used: Int = 0,
+    val memory_percent: Int = 0,
+    val disk_total: Double = 0.0,
+    val disk_used: Double = 0.0,
+    val disk_percent: Int = 0,
+    val temperature: Double = 0.0,
+    val battery: Int = 0,
+    val battery_status: String = "unknown"
 )
 
 data class StatusResponse(
     val success: Boolean,
     val status: String = "",
     val timestamp: Long = 0,
+    val system: SystemStats = SystemStats(),
     val activeTasks: List<TaskInfo> = emptyList(),
     val recentTasks: List<TaskInfo> = emptyList(),
     val session: SessionInfo? = null,
     val error: String? = null
-)
-
-data class TaskInfo(
-    val id: String,
-    val status: String,
-    val task: String?,
-    val createdAt: Long? = null,
-    val endedAt: Long? = null,
-    val progress: String? = null
-)
-
-data class SessionInfo(
-    val tokens: Int?,
-    val model: String?,
-    val updated: Long?
-)
-
-data class CommandRequest(
-    val command: String
-)
-
-data class CommandResponse(
-    val success: Boolean,
-    val message: String?,
-    val command: String?,
-    val error: String? = null
-)
-
-data class TaskResponse(
-    val success: Boolean,
-    val tasks: List<TaskInfo>
 )

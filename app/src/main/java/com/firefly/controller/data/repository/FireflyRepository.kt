@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit
 class FireflyRepository(context: Context) {
     
     companion object {
-        // 默认本地地址（用户可以修改）
         const val DEFAULT_SERVER = "http://192.168.1.215:5000"
+        const val DEFAULT_SERVER_REMOTE = "http://120.48.26.76:25000"
         const val PREFS_NAME = "firefly_prefs"
         const val KEY_SERVER = "server_url"
         const val KEY_TOKEN = "auth_token"
@@ -25,11 +25,9 @@ class FireflyRepository(context: Context) {
     private var serverUrl: String
     private var authToken: String
     private val prefs: SharedPreferences
-    
     private var api: FireflyApi? = null
     
     init {
-        // 初始化加密存储
         val masterKey = MasterKey.Builder(context)
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
@@ -42,7 +40,7 @@ class FireflyRepository(context: Context) {
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
         
-        serverUrl = prefs.getString(KEY_SERVER, DEFAULT_SERVER) ?: DEFAULT_SERVER
+        serverUrl = prefs.getString(KEY_SERVER, DEFAULT_SERVER_REMOTE) ?: DEFAULT_SERVER_REMOTE
         authToken = prefs.getString(KEY_TOKEN, "firefly_token_2024") ?: "firefly_token_2024"
         
         buildApi()
@@ -81,12 +79,6 @@ class FireflyRepository(context: Context) {
         buildApi()
     }
     
-    fun updateToken(token: String) {
-        authToken = token
-        prefs.edit().putString(KEY_TOKEN, token).apply()
-        buildApi()
-    }
-    
     fun getServerUrl() = serverUrl
     fun getToken() = authToken
     
@@ -105,32 +97,6 @@ class FireflyRepository(context: Context) {
                 Result.success(response)
             } else {
                 Result.failure(Exception(response?.error ?: "Unknown error"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
-    suspend fun sendCommand(command: String): Result<CommandResponse> {
-        return try {
-            val response = api?.sendCommand(CommandRequest(command))
-            if (response?.success == true) {
-                Result.success(response)
-            } else {
-                Result.failure(Exception(response?.error ?: "Unknown error"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    
-    suspend fun getTasks(): Result<List<TaskInfo>> {
-        return try {
-            val response = api?.getTasks()
-            if (response?.success == true) {
-                Result.success(response.tasks)
-            } else {
-                Result.failure(Exception("Failed to load tasks"))
             }
         } catch (e: Exception) {
             Result.failure(e)

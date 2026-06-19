@@ -3,7 +3,7 @@ package com.firefly.controller.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.firefly.controller.data.model.*
+import com.firefly.controller.data.model.StatusResponse
 import com.firefly.controller.data.repository.FireflyRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,10 +15,7 @@ data class UiState(
     val isConnected: Boolean = false,
     val serverUrl: String = "",
     val status: StatusResponse? = null,
-    val commandText: String = "",
-    val commandResponse: String = "",
-    val error: String? = null,
-    val isSending: Boolean = false
+    val error: String? = null
 )
 
 class MainViewModel(private val repository: FireflyRepository) : ViewModel() {
@@ -66,41 +63,6 @@ class MainViewModel(private val repository: FireflyRepository) : ViewModel() {
                 .onFailure { e ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        error = e.message
-                    )
-                }
-        }
-    }
-    
-    fun updateCommandText(text: String) {
-        _uiState.value = _uiState.value.copy(commandText = text)
-    }
-    
-    fun sendCommand() {
-        val command = _uiState.value.commandText.trim()
-        if (command.isEmpty()) return
-        
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                isSending = true,
-                commandResponse = "",
-                error = null
-            )
-            
-            repository.sendCommand(command)
-                .onSuccess { response ->
-                    _uiState.value = _uiState.value.copy(
-                        isSending = false,
-                        commandText = "",
-                        commandResponse = "✓ ${response.message ?: "Command sent"}"
-                    )
-                    // 延迟刷新状态
-                    kotlinx.coroutines.delay(2000)
-                    loadStatus()
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(
-                        isSending = false,
                         error = e.message
                     )
                 }
