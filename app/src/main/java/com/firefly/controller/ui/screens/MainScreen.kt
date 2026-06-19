@@ -346,7 +346,7 @@ fun TaskItem(task: TaskInfo) {
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1
                 )
-                task.endedAt?.let { ts: Long ->
+                task.ended_at?.let { ts: Long ->
                     Text(
                         formatTime(ts),
                         style = MaterialTheme.typography.bodySmall,
