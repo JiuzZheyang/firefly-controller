@@ -99,11 +99,11 @@ fun MainScreen(
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
-            items(recentTasks, key: { it.id }) { task: TaskInfo ->
+                items(recentTasks) { task ->
                     TaskItem(task = task)
                 }
             }
-            
+
             item { Spacer(Modifier.height(16.dp)) }
         }
     }
