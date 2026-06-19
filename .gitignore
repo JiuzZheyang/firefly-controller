@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+local.properties
+
+# Android Studio
+*.iml
+.idea/
+
+# GitHub Actions (we'll add workflow manually)
+!.github/
+
+# Built application
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Java
+*.class
+*.jar
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
