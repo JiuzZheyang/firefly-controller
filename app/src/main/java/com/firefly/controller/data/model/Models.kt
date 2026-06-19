@@ -14,6 +14,21 @@ data class SystemStats(
     val battery_status: String = "unknown"
 )
 
+data class TaskInfo(
+    val id: String,
+    val status: String,
+    val task: String,
+    val created_at: Long? = null,
+    val ended_at: Long? = null,
+    val progress: String? = null
+)
+
+data class SessionInfo(
+    val tokens: Int? = null,
+    val model: String? = null,
+    val updated: Long? = null
+)
+
 data class StatusResponse(
     val success: Boolean,
     val status: String = "",

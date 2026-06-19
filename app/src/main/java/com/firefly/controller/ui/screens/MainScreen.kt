@@ -99,7 +99,7 @@ fun MainScreen(
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
-                items(recentTasks) { task ->
+            items(recentTasks, key: { it.id }) { task: TaskInfo ->
                     TaskItem(task = task)
                 }
             }
@@ -346,9 +346,9 @@ fun TaskItem(task: TaskInfo) {
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1
                 )
-                task.endedAt?.let {
+                task.endedAt?.let { ts: Long ->
                     Text(
-                        formatTime(it),
+                        formatTime(ts),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
