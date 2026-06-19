@@ -189,7 +189,7 @@ fun StatusCard(state: UiState) {
             // 活跃任务
             state.status?.activeTasks?.firstOrNull()?.let { task ->
                 Spacer(Modifier.height(12.dp))
-                HorizontalDivider()
+                Divider()
                 Spacer(Modifier.height(12.dp))
                 
                 Row(verticalAlignment = Alignment.CenterVertically) {

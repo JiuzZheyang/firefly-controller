@@ -7,11 +7,12 @@ data class ApiResponse(
 
 data class StatusResponse(
     val success: Boolean,
-    val status: String,
-    val timestamp: Long,
-    val activeTasks: List<TaskInfo>,
-    val recentTasks: List<TaskInfo>,
-    val session: SessionInfo?
+    val status: String = "",
+    val timestamp: Long = 0,
+    val activeTasks: List<TaskInfo> = emptyList(),
+    val recentTasks: List<TaskInfo> = emptyList(),
+    val session: SessionInfo? = null,
+    val error: String? = null
 )
 
 data class TaskInfo(
